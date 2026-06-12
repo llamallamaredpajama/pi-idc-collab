@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# runtime/session state
+.pi-idc/
+.pi/
+.agent-sessions/
+cmux-launchers/
+
+# env/secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
