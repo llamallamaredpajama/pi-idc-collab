@@ -1,0 +1,114 @@
+# Implementation Ticket — GitHub Issue template (live; this repo runs backend: github).
+#
+# Required target-repo surface per docs/specs/master-architectural-spec.md §3
+# (Target-repo contract) and the architecture seed §Target repo requirements.
+# Hashed into the compiled governance contract
+# (docs/workflow/pi-idc-governance-contract.yaml source_hashes) once
+# `pi-idc governance compile` exists.
+#
+# Schema reference: WORKFLOW.md §6.3 Project schema.
+# Custom-field values (Status / ClaimState / Wave / Phase / Track / Lane /
+# Pillar trace key / Domain) are set by Sequence at admit time and updated by
+# Build during dispatch via the tracker adapter.
+
+name: Implementation Ticket
+description: An IDC execution unit dispatched by Build through the configured Tracker adapter (one ticket = one polished pillar plan derivative).
+title: "[ticket] <pillar-trace-key>"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Implementation Ticket
+
+        This issue represents one execution-status unit on the GitHub
+        Tracker backend. It traces back to a polished pillar plan at
+        `docs/plans/pillars/<domain>-phase-<n>-subphase-<n>-pillar-<n>-<slug>-plan.md`
+        and is dispatched by IDC Build per its bookend-mechanics protocol
+        (WORKFLOW.md §6.7).
+
+        Required fields below match the Tracker-interface ticket shape per
+        `WORKFLOW.md §6 Tracker substrate`. Custom-field values (Status /
+        ClaimState / Wave / Phase / Track / Lane / Pillar trace key /
+        Domain) are set by Sequence at admit time and updated by Build
+        during dispatch.
+
+  - type: textarea
+    id: trace
+    attributes:
+      label: Trace
+      description: |
+        Required — pillar plan path + upstream subphase + master-plan
+        domain/phase. Establishes the canonical-chain trace from the ticket
+        back through pillar → subphase → master-plan §Phase.
+      render: markdown
+      placeholder: |
+        Pillar: docs/plans/pillars/<domain>-phase-<n>-subphase-<n>-pillar-<n>-<slug>-plan.md
+        Upstream subphase: docs/plans/subphases/<domain>-phase-<n>-subphase-<n>-<slug>-plan.md
+        Master-plan: §Domain X / §Phase Y
+    validations:
+      required: true
+
+  - type: textarea
+    id: surfaces
+    attributes:
+      label: Surfaces
+      description: |
+        Required — file ownership table copied from the polished pillar
+        plan's Pillar Resource Ownership table. Establishes which file
+        surfaces this ticket owns exclusively vs shares (matches
+        `pillars[].owns_files` / `pillars[].shares_files` in
+        `docs/workflow/pillar-matrices/<phase-tag>-matrix.yaml`).
+      render: markdown
+      placeholder: |
+        | Resource Kind | Path | Ownership |
+        |---------------|------|-----------|
+        | file | src/<area>/<name>.ts | exclusive |
+        | doc  | docs/specs/master-architectural-spec.md | shared |
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: |
+        Required — sub-issue parent/child relationships and blocked-by
+        references. Use GitHub sub-issue creation for stage-of-pillar
+        decomposition; use blocked-by reference comments for cross-pillar
+        dependency edges. GitHub Projects V2 enforces a 50-item per-issue
+        dependency cap; the adapter raises a structured error before
+        exceeding it. State `none` if there are no dependencies.
+      render: markdown
+      placeholder: |
+        Blocked by: #<issue-num>
+        Sub-issues: #<sub-num-1>, #<sub-num-2>
+    validations:
+      required: true
+
+  - type: textarea
+    id: exit_gate
+    attributes:
+      label: Exit Gate
+      description: |
+        Required — success criteria matching the polished pillar plan's
+        §Acceptance section. Used by Build's bookend-close transaction to
+        verify the ticket is genuinely complete before flipping
+        `Status = Complete`.
+      render: markdown
+      placeholder: |
+        - Tests landed at tests/<name>.test.ts and `bun test` passes
+        - Architectural-fitness fences green
+        - Per-PR review-fix cycle merged into main
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: |
+        Optional — additional context, pillar-plan-derived discussion,
+        relevant runbook pointers.
+    validations:
+      required: false
