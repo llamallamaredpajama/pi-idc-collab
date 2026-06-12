@@ -1,0 +1,24 @@
+planning_scope: phase-wide
+phase_tag: phase-0
+source_master_section: 'default/phase-0 — master plan §"Phase 0 — Repo skeleton & toolchain" (no §Domains entry covers toolchain/skeleton work; Domain string `default` in plan stems per subphase plan decision D1; the board Domain WRITE is gated — see tracker_admission_preconditions)'
+expansion_mode: phase-wide
+expected_subphases:
+  - subphase_id: '0.1'
+    subphase_trace_key: 'default-phase-0-subphase-1-repo-skeleton'
+    source_row: 'docs/plans/master-implementation-plan.md §"Phase 0 — Repo skeleton & toolchain" (lines 30–36; no decomposition table — section reads as one cohesive subphase per bootstrap frontier digest)'
+    subphase_plan_path: docs/plans/subphases/default-phase-0-subphase-1-repo-skeleton-plan.md
+    pillar_plan_paths:
+      - docs/plans/pillars/default-phase-0-subphase-1-pillar-1-toolchain-plan.md
+      - docs/plans/pillars/default-phase-0-subphase-1-pillar-2-layout-plan.md
+      - docs/plans/pillars/default-phase-0-subphase-1-pillar-3-ci-attribution-plan.md
+    status: drafted
+    deferred_reason: ''
+tracker_admission_preconditions:
+  domain:
+    gate: 'Single compliant path (no out-of-band escape): a master-plan §Domains row covering repo-skeleton/toolchain work MUST land via Ripple, with the matching board option pre-seeded per WORKFLOW.md §6.3, BEFORE Sequence writes the board Domain field for any phase-0 item. The staged proposal (durable copy embedded in the Plan handoff at docs/workflow/handoffs/phases/2026-06-12-1153-phase-0-repo-skeleton.md §Appendix: Ripple proposal — Domain taxonomy) recommends the minimal-churn fix: add a `default` row for cross-cutting work. The operator may direct a different row through the same Ripple mechanism (entails the stem-rename sweep named in the proposal). Writing a Domain value with no master-plan trace violates WORKFLOW.md §6.6; an operator blessing without a master-plan row is NOT a compliant trace.'
+  wave:
+    gate: 'Authorized mapping (fixed, deterministic — not a per-run choice): matrix tag `wave-<n>` ↔ board option `Wave <n>`. The matrix tag format is fence-pinned (wave-<integer>) and must not be respelled; the board enum spelling is `Wave N` (WORKFLOW.md §6.3). For phase-0, Sequence MUST pre-seed exactly the board options `Wave 1` and `Wave 2` per the §6.3 enum-extension SOP BEFORE admit, then write the mapped option per pillar (wave-1 → `Wave 1`; wave-2 → `Wave 2`) and record the applied mapping in the admit artifact.'
+  phase:
+    gate: 'Board option `Phase 0` already exists — no pre-seed needed if Sequence writes exactly `Phase 0`.'
+  labels:
+    gate: 'Fail-closed: repo has only the 9 GitHub default labels; none of the WORKFLOW.md §6.3 namespace labels exist yet. Before admit, verify whether the github-tracker-implementation skill creates labels on demand; if it does NOT, pre-create the required §6.3 namespace labels for this admit (`phase:0`, `wave:1`, `wave:2`, and domain/lane labels as the admit shape requires) BEFORE the first item write. Do not proceed on an unverified assumption.'
