@@ -26,6 +26,7 @@ Master-plan §Domain traces (tracker `Domain` field values derive from these):
 | `build-lane` | spec §9 |
 | `assets` | spec §2 `skills/`, `profiles/`, `config/` |
 | `plugin` | spec §11 |
+| `default` | cross-cutting repo-skeleton / toolchain / repo-governance work with no single subsystem owner (spec §1 runtime/toolchain + spec §2 root layout) |
 
 ## Phase 0 — Repo skeleton & toolchain
 
