@@ -20,7 +20,7 @@ Run: idc-plan group 1 of autorun `2026-06-12-1059-phase-0-repo-skeleton` · gate
 
 ## What just landed
 
-- **Plan PR:** #PR_NUMBER (squash-merged to main; this handoff landed in that PR).
+- **Plan PR:** #1 — https://github.com/llamallamaredpajama/pi-idc-collab/pull/1 (squash-merged to main; this handoff landed in that PR).
 - **Subphase plan:** `docs/plans/subphases/default-phase-0-subphase-1-repo-skeleton-plan.md` (inline §Rough Pillars, decisions D1–D5, Wave-Orchestrator Handoff pointer section).
 - **Pillar plans (3):** `docs/plans/pillars/default-phase-0-subphase-1-pillar-1-toolchain-plan.md`, `…-pillar-2-layout-plan.md`, `…-pillar-3-ci-attribution-plan.md` — all `Admission Status: ready`, trace triples complete, TDD-shaped exit criteria with `[CONSTRAINTS]` lines.
 - **Matrix:** `docs/workflow/pillar-matrices/phase-0-matrix.yaml` (dependency DAG / parallel-safety / wave-ordering views; first synthesis — active and completed empty; `clash_evidence: []`).
@@ -37,7 +37,7 @@ Run: idc-plan group 1 of autorun `2026-06-12-1059-phase-0-repo-skeleton` · gate
 ## Verification (drift detection for resume)
 
 - main HEAD at run start: `d17b7ff`; Plan PR merge advances main (squash).
-- Last PR merged by this run: #PR_NUMBER (`plan: phase-0 subphase + 3 pillars`).
+- Last PR merged by this run: #1 (`plan: phase-0 subphase + 3 pillars`).
 - Alive teammates expected after close: `bootstrap-researcher` (autorun-durable; shut down by the autorun parent at run close), `plan-g1` (this teammate — stays alive until SEQUENCE_CLOSED per brief lifecycle).
 - Plan paths: see §What just landed; scratch run dir `/tmp/idc-plan/phase-0-repo-skeleton-g1/` (gitignored harness scratch; deletable after SEQUENCE_CLOSED).
 - Tracker: GitHub Projects board #5, empty at Plan close — no TRACKER writes made by Plan (Sequence authority).
