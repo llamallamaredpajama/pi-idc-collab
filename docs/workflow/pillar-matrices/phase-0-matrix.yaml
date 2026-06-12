@@ -7,13 +7,13 @@ source_subphase_plan: 'docs/plans/subphases/default-phase-0-subphase-1-repo-skel
 clash_evidence: []
 pillars:
   - pillar_id: 'default-phase-0-subphase-1-pillar-1-toolchain'
-    plan_path: 'docs/plans/pillars/default-phase-0-subphase-1-pillar-1-toolchain-plan.md'
+    plan_path: 'docs/plans/pillars/archive/default-phase-0-subphase-1-pillar-1-toolchain-plan.md'
     status: 'pending'
   - pillar_id: 'default-phase-0-subphase-1-pillar-2-layout'
-    plan_path: 'docs/plans/pillars/default-phase-0-subphase-1-pillar-2-layout-plan.md'
+    plan_path: 'docs/plans/pillars/archive/default-phase-0-subphase-1-pillar-2-layout-plan.md'
     status: 'pending'
   - pillar_id: 'default-phase-0-subphase-1-pillar-3-ci-attribution'
-    plan_path: 'docs/plans/pillars/default-phase-0-subphase-1-pillar-3-ci-attribution-plan.md'
+    plan_path: 'docs/plans/pillars/archive/default-phase-0-subphase-1-pillar-3-ci-attribution-plan.md'
     status: 'pending'
 dependency_dag:
   active: []
