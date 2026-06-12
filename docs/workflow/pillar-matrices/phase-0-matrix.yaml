@@ -1,0 +1,56 @@
+# Phase 0 pillar matrix — synthesized by idc-plan (autorun 2026-06-12-1059-phase-0-repo-skeleton, group 1)
+# First synthesis: active and completed are empty by definition; all rows pending.
+# Re-synthesis discipline: drop completed / lock active byte-for-byte / re-synthesize pending.
+phase_tag: 'phase-0'
+source_master_section: 'Phase 0 — Repo skeleton & toolchain'
+source_subphase_plan: 'docs/plans/subphases/default-phase-0-subphase-1-repo-skeleton-plan.md'
+clash_evidence: []
+pillars:
+  - pillar_id: 'default-phase-0-subphase-1-pillar-1-toolchain'
+    plan_path: 'docs/plans/pillars/default-phase-0-subphase-1-pillar-1-toolchain-plan.md'
+    status: 'pending'
+  - pillar_id: 'default-phase-0-subphase-1-pillar-2-layout'
+    plan_path: 'docs/plans/pillars/default-phase-0-subphase-1-pillar-2-layout-plan.md'
+    status: 'pending'
+  - pillar_id: 'default-phase-0-subphase-1-pillar-3-ci-attribution'
+    plan_path: 'docs/plans/pillars/default-phase-0-subphase-1-pillar-3-ci-attribution-plan.md'
+    status: 'pending'
+dependency_dag:
+  active: []
+  pending:
+    - id: 'default-phase-0-subphase-1-pillar-1-toolchain'
+      depends_on: []
+      blocks: ['default-phase-0-subphase-1-pillar-3-ci-attribution']
+      clash_with: []
+    - id: 'default-phase-0-subphase-1-pillar-2-layout'
+      depends_on: []
+      blocks: []
+      clash_with: []
+    - id: 'default-phase-0-subphase-1-pillar-3-ci-attribution'
+      depends_on: ['default-phase-0-subphase-1-pillar-1-toolchain']
+      blocks: []
+      clash_with: []
+parallel_safety:
+  active: []
+  pending:
+    - id: 'default-phase-0-subphase-1-pillar-1-toolchain'
+      parallel_safe_with: ['default-phase-0-subphase-1-pillar-2-layout']
+      unsafe_parallel_with: []
+      shared_writers: []
+    - id: 'default-phase-0-subphase-1-pillar-2-layout'
+      parallel_safe_with: ['default-phase-0-subphase-1-pillar-1-toolchain', 'default-phase-0-subphase-1-pillar-3-ci-attribution']
+      unsafe_parallel_with: []
+      shared_writers: []
+    - id: 'default-phase-0-subphase-1-pillar-3-ci-attribution'
+      parallel_safe_with: ['default-phase-0-subphase-1-pillar-2-layout']
+      unsafe_parallel_with: []
+      shared_writers: []
+wave_ordering:
+  active: []
+  pending:
+    - wave: 'wave-1'
+      pillars: ['default-phase-0-subphase-1-pillar-1-toolchain', 'default-phase-0-subphase-1-pillar-2-layout']
+      seeded_from: []
+    - wave: 'wave-2'
+      pillars: ['default-phase-0-subphase-1-pillar-3-ci-attribution']
+      seeded_from: ['default-phase-0-subphase-1-pillar-1-toolchain']
