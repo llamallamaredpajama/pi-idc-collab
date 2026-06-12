@@ -35,8 +35,6 @@ fail-closed posture — is **§6 Tracker substrate**):
   `Status="Active"` AND `ClaimState="Unclaimed"`, with `Phase` matching the active
   matrix phase-tag and `Pillar trace key` matching a matrix `pillar_id`. Values are
   read by name; field node IDs live in `tracker-config.yaml`.
-- **`filesystem`** — a `TRACKER.md` file at the repo root. Zero external setup; good
-  for getting started or for repos without a GitHub Project.
 
 ## 3. Pillar matrix & goal-recipe
 
@@ -109,17 +107,17 @@ Canonical specification of the **Tracker abstraction** that terminates the canon
 chain. Every tracker read or mutation routes through the dispatch surface
 `idc:idc-skill-tracker-adapter`, which resolves the active backend from
 `docs/workflow/tracker-config.yaml::backend` and routes to the matching implementation
-skill (`idc:idc-skill-github-tracker-implementation` or
-`idc:idc-skill-filesystem-tracker-implementation`). §2 is the operating summary; this
+skill (`idc:idc-skill-github-tracker-implementation`). §2 is the operating summary; this
 section is the contract those skills cite by anchor.
 
 ### 6.1 Backend selector (`tracker-config.yaml`)
 
 Backend selection lives in `docs/workflow/tracker-config.yaml::backend`. Recognized
-values: `github` (GitHub Projects v2 board; first-class) and `filesystem` (`TRACKER.md`
-at the repo root; zero-setup local fallback). Per-repo configuration (project number,
-cached field node IDs, Track-value allowlist) lives in the same file. Roles never
-hard-code backend semantics — every call goes through the adapter.
+value: `github` (GitHub Projects v2 board). No other backend is admitted in v1;
+admitting one (e.g. a filesystem tracker backend) requires a future explicit plan plus
+a Ripple change order. Per-repo configuration (project number, cached field node IDs,
+Track-value allowlist) lives in the same file. Roles never hard-code backend semantics
+— every call goes through the adapter.
 
 ### 6.2 Six core operations
 
@@ -128,7 +126,7 @@ contract change that requires a Ripple to admit.
 
 | Operation | Signature | Meaning |
 |---|---|---|
-| `createTicket` | `(title, body, type, labels) → ticket_id` | New tracker item (GitHub issue + board item, or a `TRACKER.md` entry). |
+| `createTicket` | `(title, body, type, labels) → ticket_id` | New tracker item (GitHub issue + board item). |
 | `setField` | `(ticket_id, field, value)` | Write one of the eight fields enumerated in §6.3. |
 | `link` | `(parent_id, child_id, kind ∈ {sub, blocks})` | Sub-item or blocked-by relation. |
 | `move` | `(ticket_id, status)` | Status transition (`Pending \| Active \| Blocked \| Complete`). |
@@ -139,8 +137,7 @@ contract change that requires a Ripple to admit.
 adapter dispatch: `export-state(--output <state.json>)` — emits a `{pillar_id: status}`
 state file (string-keyed dict) for downstream tooling; `acquire-lane-lock(--lane=<lane>,
 --ticket=<id>, --idempotency-key=<sha>)` — the atomic lane-lock primitive backing the
-bookend-open transaction; `flip-to-filesystem(--reason=<text>, --audit-log=<path>)` —
-operator-gated outage fallback (see §6.8).
+bookend-open transaction.
 
 ### 6.3 Project schema (8 fields)
 
@@ -221,14 +218,13 @@ of the queue layer; `Track` is operator-only.
 
 **Per-lane pointer.** Each active lane (one worktree OR one orchestrator session)
 carries a single `Currently building` pointer — the polished pillar plan's filename
-stem, or `(idle)` — stored in the `Lane` field (filesystem backend: the lane block in
-`TRACKER.md`). Sequence emits `(idle)` lane blocks at admit; Build is the sole
-non-`(idle)` writer (sets on bookend-open dispatch, clears on bookend-close PR merge).
+stem, or `(idle)` — stored in the `Lane` field. Sequence emits `(idle)` lane blocks at
+admit; Build is the sole non-`(idle)` writer (sets on bookend-open dispatch, clears on
+bookend-close PR merge).
 Each lane has at most one non-`(idle)` pointer at any moment; multiple lanes may carry
 non-`(idle)` pointers simultaneously (parallel-safe).
 
-**Bookend events.** Bookend events resolve through the configured adapter. Filesystem
-backend: commits with the `tracker:` prefix that update `TRACKER.md`. GitHub backend:
+**Bookend events.** Bookend events resolve through the configured adapter as GitHub
 label/state mutations — open sets `ClaimState=Claimed` then `Running`, adds
 `bookend-open` + `attempt:<n>` labels, sets `Lane=<lane>`; close routes through the
 adapter's `complete_claimed_item` op, which verifies and applies one mutation set —
@@ -249,18 +245,14 @@ session PR is deferred to phase-close, the check may pass with a recorded
 MUST clear (i.e. the SHAs MUST become main-reachable) before any sibling wave whose
 `blocks_on` references this item promotes to Active, and no later than phase-close.
 
-### 6.8 Fail-closed posture + flip-to-filesystem
+### 6.8 Fail-closed posture
 
 On backend failure (CLI exit code ≠ 0, GraphQL error, network timeout) the adapter:
 
 1. Emits a structured failure event to the run ledger with the failing operation and
    raw error.
 2. Refuses dispatch (returns non-zero so Build halts before any source-code commit).
-3. Surfaces an operator decision: continue waiting, or invoke the explicit
-   `flip-to-filesystem` op, which writes an audit-log entry, mutates
-   `tracker-config.yaml::backend` from `github` to `filesystem` for the duration of
-   the outage, and re-runs the dispatch-check via the filesystem adapter against the
-   most recent `<state.json>` cached on disk.
-4. Records the eventual flip back to `backend: github` after recovery as a paired
-   audit-log entry. Backend cutover in either direction is operator-gated and
-   audit-logged — never automatic.
+3. Surfaces an operator decision: wait for backend recovery, or halt the run. There is
+   no backend cutover in v1 — no fallback tracker backend exists; admitting one
+   requires a future explicit plan plus a Ripple change order. Recovery and resume are
+   operator-gated and recorded in the run ledger — never automatic.

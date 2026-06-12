@@ -31,5 +31,5 @@ documents:
 
 # Optional convenience mirror; the live tracker contract is tracker-config.yaml.
 tracker:
-  backend: github                                  # github | filesystem
+  backend: github                                  # github (only recognized v1 value)
   github_project_number: 5  # integer; set after `gh project create`
