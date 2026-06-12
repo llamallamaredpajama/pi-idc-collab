@@ -11,6 +11,7 @@ build/
 .pi/
 .agent-sessions/
 cmux-launchers/
+.claude/worktrees/
 
 # env/secrets
 .env
