@@ -33,3 +33,11 @@ documents:
 tracker:
   backend: github                                  # github (only recognized v1 value)
   github_project_number: 5  # integer; set after `gh project create`
+
+# Guardrail posture for AI-agent mutations in this repo (added deliberately by the operator).
+#   off        = the Path Gate observes and records, but blocks nothing
+#   controlled = off-path local mutations are DENIED; off-path integration is blocked too once the
+#                `idc/pathway-integrity` check + its repository ruleset are installed
+pathway_enforcement:
+  mode: controlled   # off | controlled | app-locked
+  attempt_ceiling: 3
